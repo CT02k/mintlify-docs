@@ -1,47 +1,48 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Primeira cobrança Pix"
+description: "Crie uma cobrança Pix em poucos passos."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
+## Pré-requisitos
 
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+Antes de começar, você precisa de:
 
-## Prerequisites
+- Uma conta Wysepay ativa.
+- Uma API key criada no dashboard, em **Configurações > Chaves de API**.
 
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+<Warning>
+Guarde a chave em variável de ambiente. Ela é exibida somente no momento da criação.
+</Warning>
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
-
+  <Step title="Defina a chave">
     ```bash
-    npm install your-package
+    export WYSEPAY_API_KEY="wyp_sua_chave"
+    export WYSEPAY_API_URL="https://seu-dominio.com/api"
     ```
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
-
+  <Step title="Crie a cobrança">
     ```bash
-    your-cli init
+    curl --request POST "$WYSEPAY_API_URL/v1/charges/pix" \
+      --header "Content-Type: application/json" \
+      --header "x-api-key: $WYSEPAY_API_KEY" \
+      --header "Idempotency-Key: pedido-1001" \
+      --data '{
+        "amountCents": 1250,
+        "description": "Pedido #1001",
+        "customer": {
+          "name": "Maria Silva",
+          "email": "maria@example.com",
+          "phone": "11999999999",
+          "documentType": "CPF",
+          "document": "12345678901"
+        }
+      }'
     ```
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
-
-    ```bash
-    your-cli start
-    ```
+  <Step title="Exiba o Pix">
+    Use `copyPaste` como código Pix copia e cola ou gere um QR Code a partir de `qrCode`.
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
-
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+Confira a referência completa em [criar cobrança Pix](/api-reference/create-pix-charge).

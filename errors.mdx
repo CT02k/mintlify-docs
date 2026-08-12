@@ -1,0 +1,28 @@
+---
+title: "Erros"
+description: "Entenda o formato de erro e trate falhas de integração."
+---
+
+Erros retornam JSON com código HTTP e uma mensagem pronta para diagnóstico.
+
+```json
+{
+  "ok": false,
+  "code": "REQUEST_ERROR",
+  "message": "O valor mínimo para Pix é R$ 5,00.",
+  "path": "/api/v1/charges/pix",
+  "timestamp": "2026-08-12T15:00:00.000Z"
+}
+```
+
+| Status | Quando ocorre | Como tratar |
+| --- | --- | --- |
+| `400` | Corpo inválido, valor abaixo do mínimo ou regra de negócio | Corrija os dados antes de repetir a chamada. |
+| `401` | API key ausente, inválida ou inativa | Verifique o header `x-api-key`. |
+| `404` | Recurso inexistente ou fora da sua conta | Valide o identificador usado. |
+| `429` | Limite de chamadas excedido | Aguarde e aplique backoff exponencial. |
+| `500` | Falha inesperada | Repita com a mesma `Idempotency-Key` quando aplicável. |
+
+<Note>
+Em produção, respostas de erro não incluem stack trace.
+</Note>

@@ -1,0 +1,28 @@
+---
+title: "Consultar transação"
+description: "Recupere o estado atual de uma cobrança Pix."
+---
+
+## `GET /v1/transactions/:id`
+
+Consulta uma transação pertencente à sua conta.
+
+```bash
+curl "$WYSEPAY_API_URL/v1/transactions/cm0transaction" \
+  --header "x-api-key: wyp_sua_chave"
+```
+
+## Status de transação
+
+| Status | Significado |
+| --- | --- |
+| `WAITING_PAYMENT` | A cobrança foi criada e aguarda pagamento. |
+| `PAID` | O Pix foi confirmado. |
+| `EXPIRED` | A cobrança expirou sem pagamento. |
+| `CANCELLED` | A cobrança foi cancelada. |
+| `FAILED` ou `REFUSED` | A cobrança não foi concluída. |
+| `DISPUTE`, `CHARGEDBACK` ou `BLOCKED` | Há uma contestação ou bloqueio associado. |
+
+<Note>
+Prefira webhooks para atualizar pedidos. A consulta é útil para reconciliação, telas administrativas e recuperação após indisponibilidade.
+</Note>

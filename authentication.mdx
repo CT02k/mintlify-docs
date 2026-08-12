@@ -1,0 +1,28 @@
+---
+title: "Autenticação"
+description: "Autentique chamadas da API pública com uma API key."
+---
+
+As rotas da API pública usam API keys. Envie a chave no header `x-api-key` em todas as requisições para `/v1`.
+
+```bash
+curl "$WYSEPAY_API_URL/v1/transactions/trx_123" \
+  --header "x-api-key: wyp_sua_chave"
+```
+
+## Criar uma chave
+
+No dashboard, acesse **Configurações > Chaves de API** e crie uma chave com um nome que identifique a integração.
+
+<Warning>
+O valor completo só é exibido uma vez. A Wysepay armazena apenas um hash da chave e não pode recuperá-la depois.
+</Warning>
+
+## Boas práticas
+
+- Nunca exponha a API key no navegador, em aplicativos móveis ou em repositórios.
+- Use variáveis de ambiente no servidor.
+- Crie uma chave por ambiente ou integração.
+- Exclua imediatamente chaves que não são mais usadas.
+
+Uma chave inválida, excluída ou inativa recebe resposta `401`.

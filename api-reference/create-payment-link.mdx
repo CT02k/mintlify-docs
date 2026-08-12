@@ -1,0 +1,49 @@
+---
+title: "Criar link de pagamento"
+description: "Gere um link hospedado com checkout Pix da Wysepay."
+---
+
+## `POST /v1/payment-links`
+
+Cria um link de pagamento ativo para sua conta.
+
+```bash
+curl --request POST "$WYSEPAY_API_URL/v1/payment-links" \
+  --header "Content-Type: application/json" \
+  --header "x-api-key: wyp_sua_chave" \
+  --data '{
+    "amountCents": 1250,
+    "description": "Assinatura mensal",
+    "metadata": { "plan": "pro" }
+  }'
+```
+
+## Corpo da requisição
+
+| Campo | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `amountCents` | integer | Sim | Valor em centavos. Mínimo: `500`. |
+| `description` | string | Sim | Descrição exibida no checkout. |
+| `expiresAt` | ISO 8601 | Não | Data de expiração do link. |
+| `metadata` | object | Não | Dados seus associados às transações geradas. |
+
+## Resposta
+
+```json
+{
+  "id": "cm0paymentlink",
+  "slug": "pay_123456789abc",
+  "amountCents": 1250,
+  "description": "Assinatura mensal",
+  "isActive": true,
+  "createdAt": "2026-08-12T15:00:00.000Z"
+}
+```
+
+Direcione o cliente para:
+
+```text
+https://seu-dashboard.com/checkout/pay_123456789abc
+```
+
+Em ambiente local, a aplicação usa `http://localhost:5173/checkout/{slug}`.

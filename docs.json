@@ -1,72 +1,54 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "name": "Wysepay Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#00C982",
+    "light": "#00E596",
+    "dark": "#009C65"
   },
   "favicon": "/favicon.svg",
-  "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "navigation": {
+    "pages": [
+      {
+        "group": "Comece aqui",
+        "pages": ["index", "quickstart", "authentication", "idempotency", "errors"]
+      },
+      {
+        "group": "API Pix",
+        "pages": ["api-reference/create-pix-charge", "api-reference/get-transaction", "api-reference/create-payment-link"]
+      },
+      {
+        "group": "Eventos",
+        "pages": ["webhooks"]
+      }
+    ],
+    "global": {
+      "anchors": [
+        { "anchor": "Dashboard", "href": "https://app.wysepay.com", "icon": "chart-line" }
+      ]
+    }
+  },
   "navbar": {
     "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
+      { "label": "Suporte", "href": "mailto:suporte@wysepay.com" }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "label": "Acessar dashboard",
+      "href": "https://app.wysepay.com"
     }
   },
   "contextual": {
-    "options": [
-      "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
-    ]
+    "options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/Argon-Apps/wysepay"
     }
   }
 }

@@ -1,0 +1,18 @@
+---
+title: "Idempotência"
+description: "Evite criar cobranças duplicadas em novas tentativas."
+---
+
+Envie um identificador único no header `Idempotency-Key` ao criar uma cobrança Pix. Se a mesma operação for reenviada por até 24 horas, a Wysepay retorna a primeira resposta em vez de criar outra transação.
+
+```text
+Idempotency-Key: order-1001-pix
+```
+
+Use uma chave diferente para cada cobrança. Não reutilize a mesma chave para pedidos diferentes.
+
+<Tip>
+Use o ID imutável do pedido do seu sistema como base da chave. Isso torna novas tentativas seguras depois de um timeout ou falha de rede.
+</Tip>
+
+O header é compatível com `POST /v1/charges/pix`. O checkout público e os saques internos também adotam o mesmo comportamento.

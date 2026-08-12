@@ -1,0 +1,68 @@
+---
+title: "Criar cobrança Pix"
+description: "Gere uma cobrança Pix e receba o BR Code para pagamento."
+---
+
+## `POST /v1/charges/pix`
+
+Cria uma cobrança Pix para um cliente.
+
+```bash
+curl --request POST "$WYSEPAY_API_URL/v1/charges/pix" \
+  --header "Content-Type: application/json" \
+  --header "x-api-key: wyp_sua_chave" \
+  --header "Idempotency-Key: pedido-1001" \
+  --data '{
+    "amountCents": 1250,
+    "description": "Pedido #1001",
+    "customer": {
+      "name": "Maria Silva",
+      "email": "maria@example.com",
+      "phone": "11999999999",
+      "documentType": "CPF",
+      "document": "12345678901"
+    },
+    "metadata": { "orderId": "1001" }
+  }'
+```
+
+## Headers
+
+| Header | Obrigatório | Descrição |
+| --- | --- | --- |
+| `x-api-key` | Sim | API key da sua conta. |
+| `Idempotency-Key` | Recomendado | Identificador único da operação. |
+
+## Corpo da requisição
+
+| Campo | Tipo | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| `amountCents` | integer | Sim | Valor em centavos. Mínimo: `500` (`R$ 5,00`). |
+| `description` | string | Sim | Descrição da cobrança, entre 3 e 180 caracteres. |
+| `customer.name` | string | Sim | Nome do pagador. |
+| `customer.email` | string | Sim | E-mail do pagador. |
+| `customer.phone` | string | Sim | Telefone do pagador. Envie apenas números. |
+| `customer.documentType` | `CPF` ou `CNPJ` | Sim | Tipo de documento. |
+| `customer.document` | string | Sim | CPF ou CNPJ do pagador. |
+| `expiresAt` | ISO 8601 | Não | Data de expiração da cobrança. |
+| `metadata` | object | Não | Dados seus associados à transação. |
+
+## Resposta
+
+```json
+{
+  "id": "cm0transaction",
+  "method": "PIX",
+  "status": "WAITING_PAYMENT",
+  "amountCents": 1250,
+  "feeCents": 100,
+  "netAmountCents": 1150,
+  "description": "Pedido #1001",
+  "qrCode": "000201...",
+  "copyPaste": "000201...",
+  "expiresAt": "2026-08-13T15:00:00.000Z",
+  "createdAt": "2026-08-12T15:00:00.000Z"
+}
+```
+
+Use `copyPaste` para o botão de copiar Pix. Você também pode renderizar `qrCode` em um QR Code. Consulte o status pelo `id` retornado ou aguarde o evento `transaction.paid`.

@@ -1,0 +1,68 @@
+---
+title: "Webhooks"
+description: "Receba eventos de pagamento em tempo real."
+---
+
+Cadastre uma URL de webhook no dashboard em **Configurações > Webhooks**. Cada endpoint recebe apenas os eventos selecionados.
+
+## Eventos disponíveis
+
+| Evento | Quando é enviado |
+| --- | --- |
+| `transaction.created` | Uma cobrança Pix é criada. |
+| `transaction.paid` | O pagamento Pix é confirmado. |
+| `dispute.created` | Uma contestação ou MED é aberta. |
+| `dispute.responded` | Uma resposta ao MED é registrada. |
+
+## Headers
+
+| Header | Descrição |
+| --- | --- |
+| `wysepay-event` | Nome do evento. |
+| `wysepay-timestamp` | Timestamp Unix em milissegundos. |
+| `wysepay-signature` | HMAC SHA-256 para validar o payload. |
+| `content-type` | Sempre `application/json`. |
+
+## Validar assinatura
+
+A assinatura é o HMAC SHA-256 da string `timestamp.payload`, onde `payload` é o JSON recebido sem alterações.
+
+```ts
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+function isValidWebhook(rawBody: string, timestamp: string, signature: string, secret: string) {
+  const expected = createHmac("sha256", secret)
+    .update(`${timestamp}.${rawBody}`)
+    .digest("hex");
+
+  return timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+}
+```
+
+<Warning>
+Use o corpo bruto da requisição para calcular a assinatura. Não reserializar o JSON antes da validação.
+</Warning>
+
+## Exemplo de evento
+
+```json
+{
+  "id": "cm0transaction",
+  "status": "PAID",
+  "amountCents": 1250,
+  "feeCents": 100,
+  "netAmountCents": 1150,
+  "method": "PIX",
+  "paymentLinkId": null,
+  "customer": {
+    "id": "cm0customer",
+    "name": "Maria Silva",
+    "email": "maria@example.com",
+    "documentType": "CPF",
+    "document": "12345678901"
+  },
+  "createdAt": "2026-08-12T15:00:00.000Z"
+}
+```
+
+Responda com qualquer status `2xx` assim que registrar o evento. A entrega atual espera até 8 segundos por uma resposta.
